@@ -1,34 +1,94 @@
 /* Scroll progress bar — scroll-timeline + animation-timeline: scroll() */
 
-.scroll-progress-demo { height: 100%; display: flex; flex-direction: column; position: relative; overflow-y: scroll; scroll-timeline: --reading-progress block; scrollbar-width: thin; scrollbar-color: oklch(28% 0.022 258) transparent; }
-.scroll-progress-header { position: sticky; top: 0; z-index: 10; background-color: oklch(16% 0.014 258); border-bottom: 1px solid oklch(28% 0.022 258); padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-.scroll-progress-track { position: absolute; top: 0; left: 0; right: 0; height: 3px; background-color: oklch(22% 0.018 258); z-index: 20; overflow: hidden; }
+/* position:absolute so height resolves and the container actually scrolls */
+.scroll-progress-demo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scroll-timeline: --reading-progress block;
+  scrollbar-width: thin;
+  scrollbar-color: oklch(38% 0.025 258) transparent;
+}
+
+.scroll-progress-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: oklch(16% 0.014 258);
+  border-bottom: 1px solid oklch(28% 0.022 258);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.scroll-progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: oklch(22% 0.018 258);
+  z-index: 20;
+  overflow: hidden;
+}
+
 .scroll-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, oklch(74% 0.19 195), oklch(72% 0.22 308));
   transform-origin: left center;
   transform: scaleX(0);
   border-radius: 0 2px 2px 0;
+
   /* Newly Available: animation-timeline: scroll() — Chrome 115+, Firefox 110+ */
   animation: reading-progress-fill linear;
   animation-timeline: --reading-progress;
 }
+
 .demo-card__preview.is-paused .scroll-progress-bar { animation: none; }
+
 @keyframes reading-progress-fill {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
 }
-.scroll-progress-label { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; font-weight: 500; letter-spacing: 0.05em; color: oklch(55% 0.015 258); text-transform: uppercase; }
-.scroll-progress-content { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
-.scroll-progress-paragraph { font-size: 0.9375rem; color: oklch(65% 0.016 258); line-height: 1.75; padding-bottom: 1.25rem; border-bottom: 1px solid oklch(22% 0.018 258); }
+
+.scroll-progress-label {
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: oklch(55% 0.015 258);
+  text-transform: uppercase;
+}
+
+.scroll-progress-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.scroll-progress-paragraph {
+  font-size: 0.9375rem;
+  color: oklch(65% 0.016 258);
+  line-height: 1.75;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid oklch(22% 0.018 258);
+}
+
 .scroll-progress-paragraph:last-child { border-bottom: none; }
+
 /* Newly Available: animation-timeline: view() */
 .demo-card__preview:not(.is-paused) .scroll-progress-paragraph {
   animation: paragraph-fade linear both;
   animation-timeline: view(block);
   animation-range: entry 0% entry 40%;
 }
+
 @keyframes paragraph-fade {
   from { opacity: 0.3; transform: translateY(0.5rem); }
-  to   { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1;   transform: translateY(0); }
 }

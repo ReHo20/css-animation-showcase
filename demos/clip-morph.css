@@ -1,29 +1,213 @@
-/* Clip-path morphing on hover */
+/* Clip-path morphing — 3 different clip-path functions, one per card */
 
-.clip-morph-demo { height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background-color: oklch(28% 0.022 258); }
-.morph-card { background-color: oklch(16% 0.014 258); position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; cursor: pointer; overflow: hidden; outline-offset: -3px; }
-.morph-card::before { content: ''; position: absolute; inset: 0; background: var(--morph-color); clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); transition: clip-path 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0.12; }
-.morph-card::after { content: ''; position: absolute; top: 0; right: 0; width: 3.5rem; height: 3.5rem; background: var(--morph-color); clip-path: polygon(100% 0, 100% 100%, 0 0); opacity: 0.15; transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.clip-morph-demo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background-color: oklch(22% 0.018 258);
+}
+
+.morph-card {
+  background-color: oklch(14% 0.013 258);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  cursor: pointer;
+  overflow: hidden;
+  outline-offset: -3px;
+}
+
+/* Coloured fill layer — revealed by clip-path on hover */
+.morph-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--morph-color);
+  opacity: 0;
+  transition:
+    clip-path 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.4s ease;
+}
+
+/* Corner accent */
+.morph-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 4rem; height: 4rem;
+  background: var(--morph-color);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+  opacity: 0.2;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .morph-card--1 { --morph-color: oklch(74% 0.19 195); }
 .morph-card--2 { --morph-color: oklch(72% 0.22 308); }
 .morph-card--3 { --morph-color: oklch(80% 0.17  55); }
-.morph-card__number { font-size: 4rem; font-weight: 700; letter-spacing: -0.06em; line-height: 1; color: var(--morph-color); opacity: 0.18; position: absolute; top: 1rem; left: 1.25rem; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); user-select: none; }
-.morph-card__body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 0.25rem; }
-.morph-card__label { font-size: 0.6875rem; font-family: 'JetBrains Mono', monospace; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--morph-color); opacity: 0.7; transition: opacity 0.25s ease; }
-.morph-card__title { font-size: 1rem; font-weight: 600; color: oklch(94% 0.008 258); letter-spacing: -0.02em; line-height: 1.2; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.morph-card__desc { font-size: 0.8125rem; color: oklch(55% 0.015 258); line-height: 1.4; margin-top: 0.125rem; }
-.morph-card__arrow { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid oklch(28% 0.022 258); color: var(--morph-color); font-size: 0.875rem; margin-top: 0.75rem; opacity: 0; transform: translateX(-0.5rem); transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease, background-color 0.25s ease; }
 
-.demo-card__preview:not(.is-paused) .morph-card::before { transition: clip-path 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.demo-card__preview:not(.is-paused) .morph-card:hover::before,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 0.08; }
+/* ── Card 1: polygon() sweep right→left ─────────────────────────────── */
+.morph-card:nth-child(1)::before {
+  clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+}
+
+/* ── Card 2: circle() expand from bottom-centre ─────────────────────── */
+.morph-card:nth-child(2)::before {
+  clip-path: circle(0% at 50% 85%);
+  transition:
+    clip-path 0.65s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.4s ease;
+}
+
+/* ── Card 3: triangle diagonal from top-right ───────────────────────── */
+.morph-card:nth-child(3)::before {
+  clip-path: polygon(110% -10%, 110% -10%, 110% -10%);
+  transition:
+    clip-path 0.7s cubic-bezier(0.25, 1.4, 0.5, 1),
+    opacity   0.4s ease;
+}
+
+.morph-card__number {
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--morph-color);
+  opacity: 0.2;
+  position: absolute;
+  top: 1rem; left: 1.125rem;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  pointer-events: none;
+}
+
+.morph-card__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.morph-card__technique {
+  font-size: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--morph-color);
+  opacity: 0.6;
+  margin-bottom: 0.25rem;
+  transition: opacity 0.25s ease;
+}
+
+.morph-card__label {
+  font-size: 0.6875rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--morph-color);
+  opacity: 0.7;
+  transition: opacity 0.25s ease;
+}
+
+.morph-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: oklch(90% 0.008 258);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.morph-card__desc {
+  font-size: 0.8125rem;
+  color: oklch(48% 0.015 258);
+  line-height: 1.4;
+  margin-top: 0.125rem;
+  transition: color 0.3s ease;
+}
+
+.morph-card__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem; height: 2rem;
+  border-radius: 50%;
+  border: 1px solid oklch(28% 0.022 258);
+  color: var(--morph-color);
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  opacity: 0;
+  transform: translateX(-0.5rem);
+  transition:
+    opacity   0.3s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color    0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* ── Hover state — only when not paused ─────────────────────────────── */
+
+/* Card 1: polygon sweep completes */
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(1):hover::before,
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(1):focus-visible::before {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  opacity: 0.45;
+}
+
+/* Card 2: circle fills */
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(2):hover::before,
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(2):focus-visible::before {
+  clip-path: circle(150% at 50% 85%);
+  opacity: 0.45;
+}
+
+/* Card 3: triangle covers */
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(3):hover::before,
+.demo-card__preview:not(.is-paused) .morph-card:nth-child(3):focus-visible::before {
+  clip-path: polygon(110% -10%, -10% -10%, 110% 110%);
+  opacity: 0.45;
+}
+
+/* Shared hover enhancements */
 .demo-card__preview:not(.is-paused) .morph-card:hover::after,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible::after { opacity: 0.35; transform: scale(1.4) rotate(5deg); }
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible::after {
+  opacity: 0.5;
+  transform: scale(1.5) rotate(8deg);
+}
+
 .demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__number,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__number { opacity: 0.35; transform: scale(1.1) translateY(-0.25rem); }
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__number {
+  opacity: 0.45;
+  transform: scale(1.08) translateY(-0.25rem);
+}
+
 .demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__label,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__label { opacity: 1; }
+.demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__technique,
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__label,
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__technique {
+  opacity: 1;
+}
+
 .demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__title,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__title { transform: translateY(-0.125rem); }
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__title {
+  transform: translateY(-0.2rem);
+}
+
+.demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__desc,
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__desc {
+  color: oklch(72% 0.015 258);
+}
+
 .demo-card__preview:not(.is-paused) .morph-card:hover .morph-card__arrow,
-.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__arrow { opacity: 1; transform: translateX(0); border-color: oklch(from var(--morph-color) l c h / 0.4); background-color: oklch(from var(--morph-color) l c h / 0.1); }
+.demo-card__preview:not(.is-paused) .morph-card:focus-visible .morph-card__arrow {
+  opacity: 1;
+  transform: translateX(0);
+  border-color: oklch(from var(--morph-color) l c h / 0.5);
+  background-color: oklch(from var(--morph-color) l c h / 0.15);
+}

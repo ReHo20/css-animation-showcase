@@ -1,14 +1,82 @@
 /* Scroll-driven card reveals — animation-timeline: view() */
 
-.scroll-reveal-demo { height: 100%; overflow: hidden; }
-.scroll-reveal-viewport { height: 100%; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; scrollbar-width: thin; scrollbar-color: oklch(28% 0.022 258) transparent; }
-.reveal-card { background-color: oklch(21% 0.018 258); border: 1px solid oklch(28% 0.022 258); border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 7rem 1fr; min-height: 7rem; flex-shrink: 0; }
-.reveal-card__media { background: var(--reveal-card-color, oklch(74% 0.19 195 / 0.2)); position: relative; overflow: hidden; }
-.reveal-card__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--reveal-card-color, oklch(74% 0.19 195 / 0.3)) 0%, transparent 60%); }
-.reveal-card__body { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.375rem; justify-content: center; }
-.reveal-card__tag { font-size: 0.6875rem; font-family: 'JetBrains Mono', monospace; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--reveal-card-color, oklch(74% 0.19 195)); }
-.reveal-card__title { font-size: 0.9375rem; font-weight: 600; color: oklch(94% 0.008 258); letter-spacing: -0.02em; line-height: 1.25; }
-.reveal-card__text { font-size: 0.8125rem; color: oklch(55% 0.015 258); line-height: 1.5; }
+/* Fill the preview area so overflow actually scrolls */
+.scroll-reveal-demo {
+  position: absolute;
+  inset: 0;
+}
+
+.scroll-reveal-viewport {
+  position: absolute;
+  inset: 0;
+  overflow-y: scroll;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: oklch(38% 0.025 258) transparent;
+}
+
+.reveal-card {
+  background-color: oklch(21% 0.018 258);
+  border: 1px solid oklch(28% 0.022 258);
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  min-height: 7rem;
+  flex-shrink: 0;
+}
+
+.reveal-card__media {
+  background: var(--reveal-card-color, oklch(74% 0.19 195 / 0.2));
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal-card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--reveal-card-color, oklch(74% 0.19 195 / 0.3)) 0%,
+    transparent 60%
+  );
+}
+
+.reveal-card__body {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  justify-content: center;
+}
+
+.reveal-card__tag {
+  font-size: 0.6875rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--reveal-card-color, oklch(74% 0.19 195));
+}
+
+.reveal-card__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: oklch(94% 0.008 258);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.reveal-card__text {
+  font-size: 0.8125rem;
+  color: oklch(55% 0.015 258);
+  line-height: 1.5;
+}
+
 .reveal-card:nth-child(1) { --reveal-card-color: oklch(74% 0.19 195); }
 .reveal-card:nth-child(2) { --reveal-card-color: oklch(72% 0.22 308); }
 .reveal-card:nth-child(3) { --reveal-card-color: oklch(80% 0.17  55); }
@@ -22,7 +90,16 @@
   animation-timeline: view(block);
   animation-range: entry 0% cover 28%;
 }
+
 @keyframes scroll-card-reveal {
-  from { opacity: 0; transform: translateY(2.5rem) scale(0.96); filter: blur(4px); }
-  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }

@@ -33,11 +33,23 @@ export const demos = [
         { tag: 'Layout',      title: 'Adaptive Grids',     text: 'Layouts that reflow intelligently without breakpoint hacks.' },
       ];
       container.innerHTML = `
-        <div class="scroll-reveal-demo"><div class="scroll-reveal-viewport">
-          ${cards.map((c) => `<article class="reveal-card"><div class="reveal-card__media"></div><div class="reveal-card__body"><span class="reveal-card__tag">${c.tag}</span><h4 class="reveal-card__title">${c.title}</h4><p class="reveal-card__text">${c.text}</p></div></article>`).join('')}
-        </div></div>`;
+        <div class="scroll-reveal-demo">
+          <div class="scroll-reveal-viewport">
+            ${cards.map((c) => `
+              <article class="reveal-card">
+                <div class="reveal-card__media"></div>
+                <div class="reveal-card__body">
+                  <span class="reveal-card__tag">${c.tag}</span>
+                  <h4 class="reveal-card__title">${c.title}</h4>
+                  <p class="reveal-card__text">${c.text}</p>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>`;
     },
   },
+
   {
     id: 'scroll-progress',
     title: 'Reading Progress',
@@ -50,11 +62,13 @@ export const demos = [
   overflow-y: scroll;
   scroll-timeline: --reading-progress block;
 }
+
 .scroll-progress-bar {
   transform-origin: left center;
   animation: reading-progress-fill linear;
   animation-timeline: --reading-progress;
 }
+
 @keyframes reading-progress-fill {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
@@ -65,7 +79,7 @@ export const demos = [
         'Scroll-driven animations represent a paradigm shift. Instead of time-based playback, animations advance proportionally as users scroll — making parallax, reveals, and progress indicators trivial to implement.',
         "The animation-timeline property is the key primitive. Setting it to scroll() or view() links an animation's progress directly to a scroll position, bypassing the main thread entirely.",
         "@starting-style allows us to define an element's appearance before its first render, enabling smooth entry animations from initial insertion into the DOM — no JavaScript needed.",
-        'The interpolate-size property finally solves the "transition to auto height" problem that developers have wrestled with for years. Height: auto is now a first-class animatable value.',
+        'The interpolate-size property finally solves the \"transition to auto height\" problem that developers have wrestled with for years. Height: auto is now a first-class animatable value.',
         'Clip-path morphing creates fluid shape transitions by interpolating between polygon coordinates. Paired with spring easing, this produces physical, organic animations.',
         'The @property at-rule registers custom properties with a type, making them interpolatable by the browser. This unlocks smooth transitions for gradients, which were previously impossible in pure CSS.',
         'prefers-reduced-motion is a user preference, not a nice-to-have. Vestibular disorders affect a significant portion of users. Good animation systems degrade gracefully — always respect it.',
@@ -74,41 +88,69 @@ export const demos = [
         <div class="scroll-progress-demo">
           <div class="scroll-progress-track"><div class="scroll-progress-bar"></div></div>
           <div class="scroll-progress-header"><span class="scroll-progress-label">Reading progress</span></div>
-          <div class="scroll-progress-content">${paragraphs.map((t) => `<p class="scroll-progress-paragraph">${t}</p>`).join('')}</div>
+          <div class="scroll-progress-content">
+            ${paragraphs.map((t) => `<p class="scroll-progress-paragraph">${t}</p>`).join('')}
+          </div>
         </div>`;
     },
   },
+
   {
     id: 'clip-morph',
     title: 'Clip-Path Morph',
     category: 'hover',
-    description: 'Background fills morph using clip-path on hover — spring easing gives it physical weight.',
-    technique: 'clip-path + cubic-bezier spring',
+    description: 'Three different clip-path functions — polygon sweep, circle expand, diagonal triangle — each with spring easing.',
+    technique: 'clip-path: polygon() / circle() / triangle()',
     cssFile: 'demos/clip-morph.css',
-    tall: false,
-    cssSnippet: `.morph-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--morph-color);
-  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-  transition: clip-path 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    tall: true,
+    cssSnippet: `/* Card 1 — polygon() sweep */
+.morph-card:nth-child(1)::before {
+  clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+  transition: clip-path 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.morph-card:hover::before {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+.morph-card:nth-child(1):hover::before {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Card 2 — circle() expand */
+.morph-card:nth-child(2)::before {
+  clip-path: circle(0% at 50% 85%);
+}
+.morph-card:nth-child(2):hover::before {
+  clip-path: circle(150% at 50% 85%);
+}
+
+/* Card 3 — diagonal triangle */
+.morph-card:nth-child(3)::before {
+  clip-path: polygon(110% -10%, 110% -10%, 110% -10%);
+}
+.morph-card:nth-child(3):hover::before {
+  clip-path: polygon(110% -10%, -10% -10%, 110% 110%);
 }`,
     render(container) {
       const cards = [
-        { label: 'Brand',  title: 'Strategy & Identity',     num: '01', modifier: 'morph-card--1' },
-        { label: 'Design', title: 'Systems & Components',    num: '02', modifier: 'morph-card--2' },
-        { label: 'Motion', title: 'Animation & Transitions', num: '03', modifier: 'morph-card--3' },
+        { label: 'Brand',  technique: 'polygon()',  title: 'Strategy & Identity',     num: '01', modifier: 'morph-card--1' },
+        { label: 'Design', technique: 'circle()',   title: 'Systems & Components',    num: '02', modifier: 'morph-card--2' },
+        { label: 'Motion', technique: 'polygon()',  title: 'Animation & Transitions', num: '03', modifier: 'morph-card--3' },
       ];
       container.innerHTML = `
         <div class="clip-morph-demo">
-          ${cards.map((c) => `<div class="morph-card ${c.modifier}" role="button" tabindex="0" aria-label="${c.label}: ${c.title}"><span class="morph-card__number" aria-hidden="true">${c.num}</span><div class="morph-card__body"><span class="morph-card__label">${c.label}</span><h4 class="morph-card__title">${c.title}</h4><p class="morph-card__desc">Hover to reveal</p><span class="morph-card__arrow" aria-hidden="true">→</span></div></div>`).join('')}
+          ${cards.map((c) => `
+            <div class="morph-card ${c.modifier}" role="button" tabindex="0" aria-label="${c.label}: ${c.title}">
+              <span class="morph-card__number" aria-hidden="true">${c.num}</span>
+              <div class="morph-card__body">
+                <span class="morph-card__technique">${c.technique}</span>
+                <span class="morph-card__label">${c.label}</span>
+                <h4 class="morph-card__title">${c.title}</h4>
+                <p class="morph-card__desc">Hover to reveal</p>
+                <span class="morph-card__arrow" aria-hidden="true">→</span>
+              </div>
+            </div>
+          `).join('')}
         </div>`;
     },
   },
+
   {
     id: 'aurora',
     title: 'Aurora Gradient',
@@ -122,10 +164,16 @@ export const demos = [
   inherits: false;
   initial-value: 195;
 }
+
 .aurora-blob--1 {
-  background: radial-gradient(circle, oklch(68% 0.28 var(--aurora-hue-a) / 0.6), transparent 70%);
+  background: radial-gradient(
+    circle,
+    oklch(68% 0.28 var(--aurora-hue-a) / 0.6),
+    transparent 70%
+  );
   animation: aurora-shift-hue 10s ease-in-out infinite alternate;
 }
+
 @keyframes aurora-shift-hue {
   from { --aurora-hue-a: 195; }
   to   { --aurora-hue-a: 260; }
@@ -134,8 +182,10 @@ export const demos = [
       container.innerHTML = `
         <div class="aurora-demo">
           <div class="aurora-background">
-            <div class="aurora-blob aurora-blob--1"></div><div class="aurora-blob aurora-blob--2"></div>
-            <div class="aurora-blob aurora-blob--3"></div><div class="aurora-blob aurora-blob--4"></div>
+            <div class="aurora-blob aurora-blob--1"></div>
+            <div class="aurora-blob aurora-blob--2"></div>
+            <div class="aurora-blob aurora-blob--3"></div>
+            <div class="aurora-blob aurora-blob--4"></div>
           </div>
           <div class="aurora-content">
             <p class="aurora-eyebrow">Motion Design</p>
@@ -146,6 +196,7 @@ export const demos = [
         </div>`;
     },
   },
+
   {
     id: 'stagger-entry',
     title: 'Staggered Entry',
@@ -160,6 +211,7 @@ export const demos = [
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: calc(var(--item-index) * 80ms);
 }
+
 @starting-style {
   .feature-item { opacity: 0; transform: translateX(-1.75rem); }
 }`,
@@ -176,7 +228,14 @@ export const demos = [
       function buildList() {
         return `<ul class="feature-list">${features.map((f, i) => `<li class="feature-item" style="--item-index:${i};--item-color:${f.color}"><span class="feature-item__icon" aria-hidden="true">${f.icon}</span><span class="feature-item__label">${f.label}</span><span class="feature-item__check" aria-hidden="true">✓</span></li>`).join('')}</ul>`;
       }
-      container.innerHTML = `<div class="stagger-demo"><div class="stagger-demo__header"><h3 class="stagger-demo__title">CSS capabilities</h3><button class="stagger-replay-btn" type="button" aria-label="Replay entry animation">↺ Replay</button></div>${buildList()}</div>`;
+      container.innerHTML = `
+        <div class="stagger-demo">
+          <div class="stagger-demo__header">
+            <h3 class="stagger-demo__title">CSS capabilities</h3>
+            <button class="stagger-replay-btn" type="button" aria-label="Replay entry animation">↺ Replay</button>
+          </div>
+          ${buildList()}
+        </div>`;
       container.querySelector('.stagger-replay-btn').addEventListener('click', () => {
         const demo = container.querySelector('.stagger-demo');
         const existing = demo.querySelector('.feature-list');
@@ -185,6 +244,7 @@ export const demos = [
       });
     },
   },
+
   {
     id: 'accordion',
     title: 'Smooth Accordion',
@@ -197,11 +257,13 @@ export const demos = [
   /* Enables height: auto transitions */
   interpolate-size: allow-keywords;
 }
+
 .accordion-body {
   height: 0;
   overflow: hidden;
   transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .accordion-item.is-open .accordion-body {
   height: auto; /* animates smoothly! */
 }`,
