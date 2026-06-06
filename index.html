@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Animation Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <p class="site-header__eyebrow">Internal Design × Dev Session</p>
+      <h1 class="site-header__title">CSS Animation<br>Showcase</h1>
+      <p class="site-header__subtitle">What’s technically possible with modern CSS — built without a single line of JS-driven animation</p>
+      <ul class="site-header__pills" aria-label="Technologies used">
+        <li><code>animation-timeline</code></li>
+        <li><code>@starting-style</code></li>
+        <li><code>@property</code></li>
+        <li><code>clip-path</code></li>
+        <li><code>interpolate-size</code></li>
+        <li><code>scroll-timeline</code></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="reduced-motion-banner" id="reduced-motion-banner" hidden>
+    <svg class="reduced-motion-banner__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="20" height="20">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+    </svg>
+    <div class="reduced-motion-banner__body">
+      <strong>prefers-reduced-motion is active</strong>
+      <p>System animations are suppressed. Toggle in OS Accessibility settings to preview the demos.</p>
+    </div>
+  </div>
+
+  <main class="site-main" id="main">
+    <p class="site-main__loading" aria-live="polite">Loading demos…</p>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

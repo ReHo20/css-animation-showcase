@@ -1,0 +1,29 @@
+/* Smooth accordion — interpolate-size: allow-keywords for height: auto */
+
+.accordion-demo { height: 100%; display: flex; flex-direction: column; padding: 1.5rem; gap: 1rem; overflow-y: auto; scrollbar-width: thin; scrollbar-color: oklch(28% 0.022 258) transparent;
+  /* Newly Available: interpolate-size — Chrome 129+, Firefox 131+, Safari 18+ */
+  interpolate-size: allow-keywords;
+}
+.accordion-demo__title { font-size: 1.125rem; font-weight: 600; color: oklch(94% 0.008 258); letter-spacing: -0.02em; flex-shrink: 0; }
+.accordion-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.accordion-item { background-color: oklch(21% 0.018 258); border: 1px solid oklch(28% 0.022 258); border-radius: 12px; overflow: hidden; transition: border-color 0.2s ease; }
+.accordion-item.is-open { border-color: oklch(74% 0.19 195 / 0.3); }
+.accordion-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.125rem; background: none; border: none; cursor: pointer; text-align: left; }
+.accordion-trigger__text { font-size: 0.9375rem; font-weight: 500; color: oklch(82% 0.012 258); letter-spacing: -0.01em; line-height: 1.35; }
+.accordion-trigger:hover .accordion-trigger__text { color: oklch(94% 0.008 258); }
+.accordion-trigger__icon { width: 1.125rem; height: 1.125rem; flex-shrink: 0; color: oklch(55% 0.015 258); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease; }
+.accordion-item.is-open .accordion-trigger__icon { transform: rotate(180deg); color: oklch(74% 0.19 195); }
+
+/* Fallback for browsers without interpolate-size */
+.accordion-body { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.accordion-item.is-open .accordion-body { max-height: 20rem; }
+
+/* Modern: interpolate-size enables height: auto transitions */
+@supports (interpolate-size: allow-keywords) {
+  .accordion-body { max-height: none; height: 0; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  .accordion-item.is-open .accordion-body { height: auto; }
+}
+
+.demo-card__preview.is-paused .accordion-body { transition: none !important; }
+.demo-card__preview.is-paused .accordion-trigger__icon { transition: none !important; }
+.accordion-body__text { padding: 0 1.125rem 1.125rem; font-size: 0.875rem; color: oklch(62% 0.016 258); line-height: 1.65; }
